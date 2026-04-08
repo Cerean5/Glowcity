@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Booklyn City AAA Full Client</title>
+  <title>Booklyn City AAA</title>
+  <meta name="theme-color" content="#0a0f18" />
   <style>
     :root{
       --bg:#05070b;
@@ -18,7 +19,10 @@
       --blue:#58a8ff;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    html,body{
+      margin:0;width:100%;height:100%;overflow:hidden;
+      background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif
+    }
     canvas{display:block}
     .panel{
       position:fixed;
@@ -30,69 +34,68 @@
       z-index:20;
     }
     #boot{
-      position:fixed; inset:0; z-index:1000;
-      display:grid; place-items:center;
+      position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
       background:radial-gradient(circle at center, rgba(18,24,36,.96), rgba(5,7,11,.98));
     }
-    #bootInner{width:min(420px,88vw); text-align:center}
-    #bootTitle{font-size:clamp(30px,6vw,62px); margin:0 0 10px 0}
-    #bootSub{margin:0 0 18px 0; color:rgba(255,255,255,.8)}
-    #bootBar{height:8px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden}
-    #bootFill{height:100%; width:0%; background:linear-gradient(90deg,#ff4545,#ff9d33)}
+    #bootInner{width:min(440px,88vw);text-align:center}
+    #bootTitle{font-size:clamp(30px,6vw,62px);margin:0 0 10px 0}
+    #bootSub{margin:0 0 18px 0;color:rgba(255,255,255,.8)}
+    #bootBar{height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+    #bootFill{height:100%;width:0;background:linear-gradient(90deg,#ff4545,#ff9d33)}
     #bootBtn{
-      margin-top:18px; padding:14px 24px; border:none; border-radius:12px;
-      background:#ff3b3b; color:#fff; font-size:16px; font-weight:700; cursor:pointer;
+      margin-top:18px;padding:14px 24px;border:none;border-radius:12px;
+      background:#ff3b3b;color:#fff;font-size:16px;font-weight:700;cursor:pointer;
     }
     #hud{
-      top:12px; left:12px; min-width:300px; padding:12px 14px; font-size:14px; line-height:1.55;
+      top:12px;left:12px;min-width:305px;padding:12px 14px;font-size:14px;line-height:1.55;
     }
     #help{
-      top:12px; right:12px; max-width:340px; padding:12px 14px; font-size:13px; line-height:1.5; color:var(--muted);
+      top:12px;right:12px;max-width:340px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--muted);
     }
     #missionBox{
-      left:50%; bottom:16px; transform:translateX(-50%);
-      min-width:360px; max-width:72vw; padding:10px 14px; text-align:center; font-size:14px;
+      left:50%;bottom:16px;transform:translateX(-50%);
+      min-width:360px;max-width:72vw;padding:10px 14px;text-align:center;font-size:14px;
     }
-    #chatWrap{left:12px; bottom:12px; width:360px; z-index:30}
-    #chatBox{height:132px; overflow-y:auto; margin-bottom:8px; padding:10px; font-size:13px; line-height:1.45}
+    #chatWrap{left:12px;bottom:12px;width:360px;z-index:30}
+    #chatBox{height:132px;overflow-y:auto;margin-bottom:8px;padding:10px;font-size:13px;line-height:1.45}
     #chatInput{
-      width:100%; border:1px solid var(--border); border-radius:12px; padding:12px;
-      outline:none; background:rgba(0,0,0,.45); color:var(--text); font-size:14px;
+      width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;
+      outline:none;background:rgba(0,0,0,.45);color:var(--text);font-size:14px;
     }
-    #minimapWrap{right:12px; bottom:12px; width:170px; height:170px; padding:10px}
-    #minimap{width:150px; height:150px; border-radius:10px; display:block; background:#040608; border:1px solid rgba(255,255,255,.12)}
-    #radioBox{right:12px; top:230px; min-width:260px; max-width:320px; padding:10px 12px; font-size:13px}
+    #minimapWrap{right:12px;bottom:12px;width:170px;height:170px;padding:10px}
+    #minimap{width:150px;height:150px;border-radius:10px;display:block;background:#040608;border:1px solid rgba(255,255,255,.12)}
+    #radioBox{right:12px;top:230px;min-width:260px;max-width:320px;padding:10px 12px;font-size:13px}
     #crosshair{
-      position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:18px; height:18px; pointer-events:none; z-index:15;
+      position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+      width:18px;height:18px;pointer-events:none;z-index:15;
     }
     #crosshair::before,#crosshair::after{
-      content:""; position:absolute; background:rgba(255,255,255,.9); box-shadow:0 0 8px rgba(255,255,255,.35);
+      content:"";position:absolute;background:rgba(255,255,255,.9);box-shadow:0 0 8px rgba(255,255,255,.35);
     }
     #crosshair::before{width:2px;height:18px;left:8px;top:0}
     #crosshair::after{width:18px;height:2px;left:0;top:8px}
     #interactionPrompt{
-      position:fixed; left:50%; bottom:86px; transform:translateX(-50%);
-      padding:10px 14px; border-radius:12px; background:rgba(8,12,20,.82);
-      border:1px solid rgba(255,255,255,.12); color:#fff; z-index:50; display:none;
+      position:fixed;left:50%;bottom:86px;transform:translateX(-50%);
+      padding:10px 14px;border-radius:12px;background:rgba(8,12,20,.82);
+      border:1px solid rgba(255,255,255,.12);color:#fff;z-index:50;display:none;
     }
     #damageFlash{
-      position:fixed; inset:0; z-index:18; pointer-events:none;
+      position:fixed;inset:0;z-index:18;pointer-events:none;
       background:radial-gradient(circle at center, transparent 48%, rgba(255,0,0,.22) 100%);
-      opacity:0; transition:opacity .14s ease;
+      opacity:0;transition:opacity .14s ease;
     }
-    #mobileControls{position:fixed; inset:0; pointer-events:none; z-index:40; display:none}
+    #mobileControls{position:fixed;inset:0;pointer-events:none;z-index:40;display:none}
     .mBtn{
-      pointer-events:auto; position:absolute; padding:16px; border:none; border-radius:50%;
-      background:rgba(20,20,20,.72); color:#fff; font-weight:700; min-width:64px; min-height:64px;
+      pointer-events:auto;position:absolute;padding:16px;border:none;border-radius:50%;
+      background:rgba(20,20,20,.72);color:#fff;font-weight:700;min-width:64px;min-height:64px;
       border:1px solid rgba(255,255,255,.14);
     }
-    #joyPad{left:20px; bottom:28px; width:140px; height:140px; position:absolute; pointer-events:auto; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:rgba(20,20,20,.32)}
-    #joyKnob{position:absolute; left:50px; top:50px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.25)}
-    #fireBtn{right:20px; bottom:34px}
-    #interactBtn{right:100px; bottom:120px}
-    #reloadBtn{right:32px; bottom:130px}
-    #sprintBtn{left:176px; bottom:42px}
+    #joyPad{left:20px;bottom:28px;width:140px;height:140px;position:absolute;pointer-events:auto;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(20,20,20,.32)}
+    #joyKnob{position:absolute;left:50px;top:50px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.25)}
+    #fireBtn{right:20px;bottom:34px}
+    #interactBtn{right:100px;bottom:120px}
+    #reloadBtn{right:32px;bottom:130px}
+    #sprintBtn{left:176px;bottom:42px}
     .muted{color:var(--muted)}
     .ok{color:var(--ok)}
     .warn{color:var(--warn)}
@@ -158,7 +161,6 @@
     <button id="sprintBtn" class="mBtn">RUN</button>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
   <script type="module">
     import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
     import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
@@ -179,7 +181,7 @@
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
     renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(1);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.autoUpdate = false;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -216,7 +218,7 @@
     bounce.position.set(0, 10, 0);
     scene.add(bounce);
 
-    const socket = window.io ? io() : null;
+    const socket = (typeof window.io === "function") ? window.io() : null;
 
     const state = {
       mode: "BOOT",
@@ -246,7 +248,7 @@
       currentDistrict: "Booklyn",
       playerGang: "Sons of Gunsmoke",
       missionState: localStorage.getItem("bc_missionState") || "pickup",
-      missionText: "",
+      missionText: "Go to pickup marker",
       modeLabel: "On Foot",
       lastShotAt: 0,
       lastDamageAt: 0,
@@ -261,23 +263,16 @@
       policeCars: [],
       civilians: [],
       enemies: [],
-      policeUnits: [],
-      interactables: [],
       radioName: "OFF",
       fps: 60,
       lastSave: performance.now(),
       joy: { x: 0, y: 0 },
-      districtTerritories: {
-        Booklyn: "Sons of Gunsmoke",
-        Bronks: "Iron Circle",
-        Manhatten: "Neon Syndicate",
-        Queenz: "Ghost Cartel",
-        "Harlem Heights": "Sons of Gunsmoke"
-      }
+      id: null
     };
 
     const refs = {
       player: null,
+      playerMount: null,
       playerCar: null,
       playerWeapon: null,
       pickupMarker: null,
@@ -462,29 +457,28 @@
     }
 
     async function loadTemplates() {
-      refs.worldTemplates.player = await safeLoad("/models/player.glb");
-      refs.worldTemplates.gun = await safeLoad("/models/gun.glb");
-      refs.worldTemplates.playerCar = await safeLoad("/models/model.glb");
-      refs.worldTemplates.policeStation = await safeLoad("/models/southern_district_police_station.glb");
-      refs.worldTemplates.human = await safeLoad("/models/jill_valentine_-_resident_evil_3_ps1 (1).glb");
+      refs.worldTemplates.player = await safeLoad("./models/player.glb");
+      refs.worldTemplates.gun = await safeLoad("./models/gun.glb");
+      refs.worldTemplates.playerCar = await safeLoad("./models/model.glb");
+      refs.worldTemplates.policeStation = await safeLoad("./models/southern_district_police_station.glb");
+      refs.worldTemplates.human = await safeLoad("./models/jill_valentine_-_resident_evil_3_ps1 (1).glb");
 
-      const civPaths = ["/models/1973_chevrolet_corvette_convertible_454.glb", "/models/model.glb"];
-      for (const p of civPaths) {
+      for (const p of ["./models/1973_chevrolet_corvette_convertible_454.glb", "./models/model.glb"]) {
         const m = await safeLoad(p);
         if (m) refs.worldTemplates.civilianCars.push(m);
       }
 
-      const policePaths = ["/models/2012_mercedes-benz_c63_amg_black_series_-_patrol.glb", "/models/model.glb"];
-      for (const p of policePaths) {
+      for (const p of ["./models/2012_mercedes-benz_c63_amg_black_series_-_patrol.glb", "./models/model.glb"]) {
         const m = await safeLoad(p);
         if (m) refs.worldTemplates.policeCars.push(m);
       }
 
-      const buildingPaths = ["/models/city.glb", "/models/buildings.glb", "/models/ccity_building_set_1 (1).glb"];
-      for (const p of buildingPaths) {
+      for (const p of ["./models/city.glb", "./models/buildings.glb", "./models/ccity_building_set_1 (1).glb"]) {
         const m = await safeLoad(p);
         if (m) refs.worldTemplates.buildings.push(m);
       }
+
+      await new Promise(r => setTimeout(r, 200));
     }
 
     function buildGroundShell() {
@@ -530,13 +524,25 @@
 
     function buildGLBEnvironment() {
       const templates = refs.worldTemplates.buildings;
-      if (!templates.length) return;
+      if (!templates.length) {
+        for (let i = 0; i < 34; i++) {
+          const h = rand(20, 90);
+          const b = new THREE.Mesh(new THREE.BoxGeometry(18, h, 18), stdMat(0x1e232d, 0.7, 0.22));
+          const x = rand(-420, 420);
+          const z = rand(-420, 420);
+          if (Math.abs(x) < 42 || Math.abs(z) < 42) continue;
+          b.position.set(x, h / 2, z);
+          b.castShadow = true;
+          b.receiveShadow = true;
+          worldGroup.add(b);
+        }
+        return;
+      }
 
       const MAX_BUILDINGS = 46;
       for (let i = 0; i < MAX_BUILDINGS; i++) {
         const base = pick(templates);
         const clone = optimizeModel(base.clone());
-
         const x = rand(-420, 420);
         const z = rand(-420, 420);
         if (Math.abs(x) < 42 || Math.abs(z) < 42) continue;
@@ -548,9 +554,7 @@
         setGroundY(clone, 0);
         clone.position.x += x;
         clone.position.z += z;
-
         worldGroup.add(clone);
-        state.interactables.push({ type: "building", mesh: clone });
       }
     }
 
@@ -601,22 +605,24 @@
       refs.player.position.set(state.x, refs.player.position.y, state.z);
       actorGroup.add(refs.player);
 
-      const mount = new THREE.Group();
-      mount.position.set(0.3, 1.1, 0.25);
-      refs.player.add(mount);
+      refs.playerMount = new THREE.Group();
+      refs.playerMount.position.set(0.3, 1.1, 0.25);
+      refs.player.add(refs.playerMount);
 
       refs.playerWeapon = refs.worldTemplates.gun ? optimizeModel(refs.worldTemplates.gun.clone()) : makeWeaponMesh(state.weapon);
       refs.playerWeapon.rotation.y = Math.PI / 2;
-      mount.add(refs.playerWeapon);
+      refs.playerMount.add(refs.playerWeapon);
+
+      state.camX = state.x;
+      state.camZ = state.z;
     }
 
     function updateWeapon() {
-      if (!refs.player || !refs.player.children.length) return;
-      const mount = refs.player.children[refs.player.children.length - 1];
-      while (mount.children.length) mount.remove(mount.children[0]);
-      refs.playerWeapon = makeWeaponMesh(state.weapon);
+      if (!refs.playerMount) return;
+      while (refs.playerMount.children.length) refs.playerMount.remove(refs.playerMount.children[0]);
+      refs.playerWeapon = refs.worldTemplates.gun ? optimizeModel(refs.worldTemplates.gun.clone()) : makeWeaponMesh(state.weapon);
       refs.playerWeapon.rotation.y = Math.PI / 2;
-      mount.add(refs.playerWeapon);
+      refs.playerMount.add(refs.playerWeapon);
     }
 
     function buildCar() {
@@ -632,7 +638,8 @@
       const policeTemplates = refs.worldTemplates.policeCars.length ? refs.worldTemplates.policeCars : [proceduralCar(0x2244ff)];
 
       for (let i = 0; i < 8; i++) {
-        const mesh = optimizeModel(pick(civTemplates).clone ? pick(civTemplates).clone() : proceduralCar(0x00aaff));
+        const base = pick(civTemplates);
+        const mesh = base.clone ? optimizeModel(base.clone()) : proceduralCar(0x00aaff);
         mesh.scale.setScalar(0.65);
         setGroundY(mesh, 0);
         mesh.position.set(rand(-260, 260), mesh.position.y, rand(-260, 260));
@@ -641,7 +648,8 @@
       }
 
       for (let i = 0; i < 3; i++) {
-        const mesh = optimizeModel(pick(policeTemplates).clone ? pick(policeTemplates).clone() : proceduralCar(0x2244ff));
+        const base = pick(policeTemplates);
+        const mesh = base.clone ? optimizeModel(base.clone()) : proceduralCar(0x2244ff);
         mesh.scale.setScalar(0.68);
         setGroundY(mesh, 0);
         mesh.position.set(rand(-220, 220), mesh.position.y, rand(-220, 220));
@@ -651,7 +659,8 @@
     }
 
     function makeHuman(role = "civilian") {
-      let mesh = refs.worldTemplates.human ? optimizeModel(refs.worldTemplates.human.clone()) : proceduralPlayer();
+      const base = refs.worldTemplates.human;
+      let mesh = base ? optimizeModel(base.clone()) : proceduralPlayer();
       mesh.scale.setScalar(role === "enemy" ? 1 : 0.95);
       tintModel(mesh, role === "enemy" ? 0.08 : 0.04);
       setGroundY(mesh, 0);
@@ -748,7 +757,7 @@
     }
 
     function enterInterior(type) {
-      if (refs.activeInterior && refs.activeInterior.parent) refs.activeInterior.parent.remove(refs.activeInterior);
+      if (refs.activeInterior?.parent) refs.activeInterior.parent.remove(refs.activeInterior);
       refs.activeInterior = buildInterior(type);
       actorGroup.add(refs.activeInterior);
       state.insideInterior = true;
@@ -760,7 +769,7 @@
     }
 
     function exitInterior() {
-      if (refs.activeInterior && refs.activeInterior.parent) refs.activeInterior.parent.remove(refs.activeInterior);
+      if (refs.activeInterior?.parent) refs.activeInterior.parent.remove(refs.activeInterior);
       refs.activeInterior = null;
       state.insideInterior = false;
       state.interiorType = null;
@@ -815,14 +824,14 @@
         }
       }
 
-      if (dist2D(state.x, state.z, refs.shopMarker.position.x, refs.shopMarker.position.z) < 8 && state.money >= 50) {
+      if (refs.shopMarker && dist2D(state.x, state.z, refs.shopMarker.position.x, refs.shopMarker.position.z) < 8 && state.money >= 50) {
         state.money -= 50;
         state.reserveAmmo += 20;
         addChat("Bought reserve ammo +20");
         return;
       }
 
-      if (dist2D(state.x, state.z, refs.garageMarker.position.x, refs.garageMarker.position.z) < 8 && refs.playerCar) {
+      if (refs.garageMarker && dist2D(state.x, state.z, refs.garageMarker.position.x, refs.garageMarker.position.z) < 8 && refs.playerCar) {
         refs.playerCar.scale.multiplyScalar(1 + rand(-0.03, 0.03));
         addChat("Garage tuned vehicle.");
       }
@@ -854,7 +863,7 @@
 
     function shoot() {
       if (state.mode !== "PLAYING") return;
-      if (state.reloading || state.insideInterior && state.interiorType === "shop") return;
+      if (state.reloading || (state.insideInterior && state.interiorType === "shop")) return;
 
       const ws = weaponStats();
       const now = performance.now();
@@ -881,9 +890,8 @@
           enemy.mesh.position.x -= Math.sin(state.rot) * 0.8;
           enemy.mesh.position.z -= Math.cos(state.rot) * 0.8;
           flashDamage();
-
           if (enemy.hp <= 0) {
-            if (enemy.mesh.parent) enemy.mesh.parent.remove(enemy.mesh);
+            enemy.mesh.parent?.remove(enemy.mesh);
             state.enemies = state.enemies.filter(e => e !== enemy);
             state.money += 100;
             state.xp += 20;
@@ -915,6 +923,7 @@
       });
 
       document.body.addEventListener("click", () => {
+        state.mode = "PLAYING";
         state.mouseLook = true;
       });
 
@@ -987,7 +996,7 @@
       socket.on("update", (p) => ensureRemote(p.id, p));
       socket.on("playerLeft", (id) => {
         if (state.remotes[id]) {
-          if (state.remotes[id].mesh.parent) state.remotes[id].mesh.parent.remove(state.remotes[id].mesh);
+          state.remotes[id].mesh.parent?.remove(state.remotes[id].mesh);
           delete state.remotes[id];
         }
       });
@@ -1031,7 +1040,7 @@
     }
 
     function updatePlayer(delta) {
-      if (!refs.player || state.inCar || state.insideInterior && state.interiorType === "shop" && state.reloading) return;
+      if (!refs.player || state.inCar || (state.insideInterior && state.interiorType === "shop" && state.reloading)) return;
 
       if (state.keys["shift"] || Math.abs(state.joy.y) > 0.7) state.stamina -= 0.4;
       else state.stamina += 0.25;
@@ -1058,8 +1067,8 @@
       state.velX *= friction;
       state.velZ *= friction;
 
-      state.x += state.velX * 10;
-      state.z += state.velZ * 10;
+      state.x += state.velX * 6;
+      state.z += state.velZ * 6;
 
       const speed = Math.hypot(state.velX, state.velZ);
       state.modeLabel = "On Foot";
@@ -1076,7 +1085,6 @@
 
       if (state.keys["w"] || state.joy.y < -0.15) state.driveSpeed += accel;
       if (state.keys["s"] || state.joy.y > 0.15) state.driveSpeed -= accel * 0.6;
-
       state.driveSpeed *= grip;
 
       const turnFactor = Math.min(Math.abs(state.driveSpeed) * 2, 1);
@@ -1089,8 +1097,6 @@
       refs.playerCar.position.x = state.x;
       refs.playerCar.position.z = state.z;
       refs.playerCar.rotation.y = state.rot;
-
-      refs.player.visible = false;
       state.modeLabel = "Driving";
     }
 
@@ -1202,7 +1208,6 @@
 
       state.stress = Math.min(100, state.stress * 0.98 + (state.wanted > 0 ? 0.3 : 0));
       bounce.position.set(state.x, 8, state.z);
-
       state.missionText = state.missionState === "pickup" ? "Go to pickup marker" : "Deliver the package";
 
       if (state.health <= 0) {
@@ -1260,11 +1265,11 @@
         txt = state.inCar ? "Press F to exit vehicle" : "Press F to enter vehicle";
       }
 
-      if (!txt && state.missionState === "pickup" && dist2D(state.x, state.z, refs.pickupMarker.position.x, refs.pickupMarker.position.z) < 7) {
+      if (!txt && state.missionState === "pickup" && refs.pickupMarker && dist2D(state.x, state.z, refs.pickupMarker.position.x, refs.pickupMarker.position.z) < 7) {
         txt = "Press F to pick up package";
       }
 
-      if (!txt && state.missionState === "deliver" && dist2D(state.x, state.z, refs.deliveryMarker.position.x, refs.deliveryMarker.position.z) < 7) {
+      if (!txt && state.missionState === "deliver" && refs.deliveryMarker && dist2D(state.x, state.z, refs.deliveryMarker.position.x, refs.deliveryMarker.position.z) < 7) {
         txt = "Press F to deliver package";
       }
 
@@ -1335,15 +1340,19 @@
         mini.fillRect(cx + dx - 1, cy + dz - 1, 2, 2);
       }
 
-      mini.fillStyle = "#35e08a";
-      const px = (refs.pickupMarker.position.x - state.x) * scale;
-      const pz = (refs.pickupMarker.position.z - state.z) * scale;
-      mini.fillRect(cx + px - 2, cy + pz - 2, 4, 4);
+      if (refs.pickupMarker) {
+        mini.fillStyle = "#35e08a";
+        const px = (refs.pickupMarker.position.x - state.x) * scale;
+        const pz = (refs.pickupMarker.position.z - state.z) * scale;
+        mini.fillRect(cx + px - 2, cy + pz - 2, 4, 4);
+      }
 
-      mini.fillStyle = "#ffcb46";
-      const dx2 = (refs.deliveryMarker.position.x - state.x) * scale;
-      const dz2 = (refs.deliveryMarker.position.z - state.z) * scale;
-      mini.fillRect(cx + dx2 - 2, cy + dz2 - 2, 4, 4);
+      if (refs.deliveryMarker) {
+        mini.fillStyle = "#ffcb46";
+        const dx2 = (refs.deliveryMarker.position.x - state.x) * scale;
+        const dz2 = (refs.deliveryMarker.position.z - state.z) * scale;
+        mini.fillRect(cx + dx2 - 2, cy + dz2 - 2, 4, 4);
+      }
     }
 
     function saveProgress(now) {
@@ -1397,10 +1406,17 @@
 
       bootFill.style.width = "100%";
 
+      state.camX = state.x;
+      state.camZ = state.z;
+      state.mode = "PLAYING";
+      boot.style.display = "none";
+
       setTimeout(() => {
-        boot.style.display = "none";
-        state.mode = "PLAYING";
-      }, 900);
+        if (state.mode !== "PLAYING") {
+          state.mode = "PLAYING";
+          boot.style.display = "none";
+        }
+      }, 1500);
     }
 
     function loop() {
@@ -1415,7 +1431,11 @@
 
       updatePlayer(delta);
       updateVehicle();
-      if (!state.inCar && refs.player) refs.player.visible = true;
+
+      if (refs.player) {
+        refs.player.visible = !state.inCar;
+      }
+
       updateTrafficAndPolice();
       updateCivilians(delta);
       updateEnemies(now);
