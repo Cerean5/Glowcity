@@ -1,1 +1,11 @@
-
+{
+  "name": "GlowCity AAA",
+  "short_name": "GlowCity",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#05070b",
+  "theme_color": "#0a0f18",
+  "description": "GlowCity AAA browser open-world game."
+}
